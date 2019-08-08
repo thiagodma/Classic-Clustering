@@ -114,7 +114,7 @@ class ClassicClustering():
 
         #Retira numeros romanos e stopwords
         texto_limpo = texto_limpo.split()
-        texto_sem_stopwords = [self.roman2num(palavra) for palavra in texto_limpo]
+        texto_sem_stopwords = [self.tira_stopwords_e_romanos(palavra) for palavra in texto_limpo]
         texto_sem_stopwords = ' '.join(texto_sem_stopwords)
 
         #Remove pontuacao e digitos
@@ -170,7 +170,7 @@ class ClassicClustering():
     def stem(self):
         '''
         Faz o stemming nas palavras utilizando o pacote nltk com o RSLP Portuguese stemmer.
-        O resultado do stemming fica salvo no atriuto textos_stem.
+        O resultado do stemming fica salvo no atributo textos_stem.
 
         Variáveis de entrada:
         None
