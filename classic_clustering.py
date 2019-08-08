@@ -81,6 +81,50 @@ class ClassicClustering():
 
         return ' '.join(texto_tratado)
 
+    def trata_textos(self, texto):
+        '''
+        Trata os textos. Remove stopwords, sites, pontuacao, caracteres especiais etc.
+        Você pode (deve) alterar esse método para se ajustar da melhor forma possível ao seu problema
+
+        Variáveis de entrada:
+        texto: é uma string que contém o texto a ser tratado.
+
+        Variáveis de saída:
+        texto_limpo: é uma string que contém o texto já tratado.
+        '''
+
+        #converte todos caracteres para letra minúscula
+        texto_lower = texto.lower()
+        texto_lower = re.sub(r'\xa0',' ',texto_lower)
+
+        #tira sites
+        texto_sem_sites =  re.sub('(http|www)[^ ]+','',texto_lower)
+
+        #Remove acentos e pontuação
+        texto_sem_acento_pontuacao = self.limpa_utf8(texto_sem_sites)
+
+        #Remove hifens e barras
+        texto_sem_hifens_e_barras = re.sub('[-\/]', ' ', texto_sem_acento_pontuacao)
+
+        #Troca qualquer tipo de espacamento por espaço
+        texto_sem_espacamentos = re.sub(r'\s', ' ', texto_sem_hifens_e_barras)
+
+        #Remove pontuacao e digitos
+        texto_limpo = re.sub('[^A-Za-z]', ' ' , texto_sem_espacamentos)
+
+        #Retira numeros romanos e stopwords
+        texto_limpo = texto_limpo.split()
+        texto_sem_stopwords = [self.roman2num(palavra) for palavra in texto_limpo]
+        texto_sem_stopwords = ' '.join(texto_sem_stopwords)
+
+        #Remove pontuacao e digitos
+        texto_limpo = re.sub('[^A-Za-z]', ' ' , texto_sem_stopwords)
+
+        #Remove espaços extras
+        texto_limpo = re.sub(' +', ' ', texto_limpo)
+
+        return texto_limpo
+
     def tira_stopwords_e_romanos(self, palavra, values={'m': 1000, 'd': 500, 'c': 100, 'l': 50,
                                     'x': 10, 'v': 5, 'i': 1}):
         '''
