@@ -45,7 +45,7 @@ out: é uma string vazia se a entrada era um número romano ou stop word. Se a e
 Você deve definir seu método de importar textos. Nesse método você deve inicializar os atributos 'textos' e 'textos_tratados'. Você pode (deve) adicionar variáveis de entrada para esse método para se ajustar ao seu problema.
 
 #### 6. stem():
-Faz o stemming nas palavras utilizando o pacote nltk com o RSLP Portuguese stemmer. O resultado do stemming fica salvo no atriuto textos_stem.
+Faz o stemming nas palavras utilizando o pacote nltk com o RSLP Portuguese stemmer. O resultado do stemming fica salvo no atributo textos_stem.
 
 Variáveis de entrada:
 None
