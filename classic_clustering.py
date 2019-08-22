@@ -219,16 +219,16 @@ class ClassicClustering():
         X = base_tfidf_reduced[:,0]
         Y = base_tfidf_reduced[:,1]
 
-        colors = cm.rainbow(np.linspace(0, 1, len(n_normas)))
+        colors = cm.rainbow(np.linspace(0, 1, len(n_textos)))
 
         for cluster, color in zip(clusters, colors):
             idxs = np.where(id_clusters == cluster) #a primeira cluster não é a 0 e sim a 1
-            n_normas[cluster-1] = len(idxs[0])
+            n_textos[cluster-1] = len(idxs[0])
             x = X[idxs[0]]
             y = Y[idxs[0]]
             plt.scatter(x, y, color=color)
 
-        n_textos = pd.DataFrame(n_normas, columns=['numero de textos'])
+        n_textos = pd.DataFrame(n_textos, columns=['numero de textos'])
         cluster_n_textos = pd.DataFrame(clusters,columns=['cluster_id']).join(n_textos)
 
         return cluster_n_textos
