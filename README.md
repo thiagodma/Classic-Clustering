@@ -123,7 +123,7 @@ Você deve criar método que cria csvs que serão utilizados para a análise dos
 É necessário que você crie um csv com as seguintes características:
   1. Uma coluna que contém o identificador do texto (o atributo textos_id);
   2. Uma coluna que contém o códigos das clusters. Essa coluna DEVE se chamar 'cluster_id';
-  3. Uma coluna que contém os textos tratados (o atributo textos_tratados)
+  3. Uma coluna que contém os textos tratados (o atributo textos_tratados). Essa coluna DEVE se chamar 'textos_tratados'.
 
 #### 10. generate_wordcloud(cluster_id, filename:str):
 
