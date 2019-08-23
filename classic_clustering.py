@@ -123,8 +123,7 @@ class ClassicClustering():
 
         return texto_limpo
 
-    def tira_stopwords_e_romanos(self, palavra:str, values={'m': 1000, 'd': 500, 'c': 100, 'l': 50,
-                                    'x': 10, 'v': 5, 'i': 1}):
+    def tira_stopwords_e_romanos(self, palavra:str):
         '''
         Retira stop words e números romanos.
 
@@ -257,7 +256,7 @@ class ClassicClustering():
 
         return base_tfidf
 
-    def SVD(self,dim:int=500,base_tfidf):
+    def SVD(self, base_tfidf, dim:int=500):
         '''
         Reduz a dimensionalidade dos dados de entrada.
 
