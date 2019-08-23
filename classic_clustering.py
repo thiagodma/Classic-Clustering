@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import pdb
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from scipy.cluster import hierarchy
 #nltk.download('rslp')
 #nltk.download('stopwords')
 
@@ -32,7 +33,7 @@ class ClassicClustering():
         self.textos_id = [] #atributo que contém um identificador único para cada texto
         self.stop_words = [] #atributo que contém todas as stop words que serão levadas em consideração no seu problema
 
-    def define_stop_words(self):
+    def define_stop_words(self,user_defined_stopwords:list = ['']):
         '''
         Inicializa o atributo "stop_words" da classe pegando stopwords de
         diferentes bibliotecas e as tratando para ficarem no formato correto.
@@ -50,17 +51,14 @@ class ClassicClustering():
         self.stop_words = self.stop_words + nltk.corpus.stopwords.words('portuguese')
         self.stop_words = self.stop_words + ['art','dou','secao','pag','pagina', 'in', 'inc', 'obs', 'sob', 'ltda','ia']
         self.stop_words = self.stop_words + ['ndash', 'mdash', 'lsquo','rsquo','ldquo','rdquo','bull','hellip','prime','lsaquo','rsaquo','frasl', 'ordm']
-        self.stop_words = self.stop_words + ['prezado', 'prezados', 'prezada', 'prezadas', 'gereg', 'ggali','usuario', 'usuaria', 'deseja','gostaria', 'boa tarde', 'bom dia', 'boa noite']
-        self.stop_words = self.stop_words + ['rdc','resolucao','portaria','lei','janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro']
-        self.stop_words = self.stop_words + ['decreto','anvisa','anvs','diretoria','colegiada','capitulo','item','regulamento','tecnico','nr','instrucao','normativa','anexo']
-        self.stop_words = self.stop_words + ['paragrafo', 'unico','devem','caso','boas','vigilancia','sanitaria','cada']
+        self.stop_words = self.stop_words + user_defined_stopwords
         self.stop_words = list(dict.fromkeys(self.stop_words))
         self.stop_words = ' '.join(self.stop_words)
 
         #As stop_words vem com acentos/cedilhas. Aqui eu tiro os caracteres indesejados
         self.stop_words = self.limpa_utf8(self.stop_words)
 
-    def limpa_utf8(self, texto):
+    def limpa_utf8(self, texto:str):
         '''
         Recodifica em utf-8. Remove cedilhas, acentos e coisas de latin.
 
@@ -81,7 +79,7 @@ class ClassicClustering():
 
         return ' '.join(texto_tratado)
 
-    def trata_textos(self, texto):
+    def trata_textos(self, texto:str):
         '''
         Trata os textos. Remove stopwords, sites, pontuacao, caracteres especiais etc.
         Você pode (deve) alterar esse método para se ajustar da melhor forma possível ao seu problema
@@ -125,7 +123,7 @@ class ClassicClustering():
 
         return texto_limpo
 
-    def tira_stopwords_e_romanos(self, palavra, values={'m': 1000, 'd': 500, 'c': 100, 'l': 50,
+    def tira_stopwords_e_romanos(self, palavra:str, values={'m': 1000, 'd': 500, 'c': 100, 'l': 50,
                                     'x': 10, 'v': 5, 'i': 1}):
         '''
         Retira stop words e números romanos.
@@ -233,7 +231,33 @@ class ClassicClustering():
 
         return cluster_n_textos
 
-    def SVD(self,dim,base_tfidf):
+    def vec_tfidf(self,stem:bool=True):
+        '''
+        Vetoriza e aplica o tfidf nos textos. Por padrão utiliza stemming. Se
+        não quiser stemming é só mudar o parâmetro 'stem' para False.
+
+        Variáveis de entrada:
+        stem: é um bool que diz se vai usar os textos com stemming ou não.
+
+        Variáveis de saída:
+        base_tfidf: matriz esparsa que contém a vetorização e aplicação do tfidf
+        nos textos
+        '''
+
+        if stem:
+            vec = CountVectorizer()
+            bag_palavras = vec.fit_transform(self.textos_stem)
+            feature_names = vec.get_feature_names()
+            base_tfidf = TfidfTransformer().fit_transform(bag_palavras)
+        else:
+            vec = CountVectorizer()
+            bag_palavras = vec.fit_transform(self.textos_tratados)
+            feature_names = vec.get_feature_names()
+            base_tfidf = TfidfTransformer().fit_transform(bag_palavras)
+
+        return base_tfidf
+
+    def SVD(self,dim:int=500,base_tfidf):
         '''
         Reduz a dimensionalidade dos dados de entrada.
 
@@ -247,6 +271,7 @@ class ClassicClustering():
 
         print('Começou a redução de dimensionalidade.')
         t = time.time()
+        if base_tfidf.shape[1] < dim: dim = base_tfidf.shape[1] - 1
         svd = TruncatedSVD(n_components = dim, random_state = 42)
         base_tfidf_reduced = svd.fit_transform(base_tfidf)
         print('Número de dimensões de entrada: ' + str(base_tfidf.shape[1]))
@@ -255,7 +280,7 @@ class ClassicClustering():
         print('Tempo para fazer a redução de dimensionalidade: ' + str(elpsd) + '\n')
         return base_tfidf_reduced
 
-    def generate_wordcloud(self, cluster_id, filename):
+    def generate_wordcloud(self, cluster_id, filename:str):
         '''
         Gera uma nuvem de palavras de uma cluster com identificador 'cluster_id'.
 
