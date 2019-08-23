@@ -33,7 +33,7 @@ class ClassicClustering():
         self.textos_id = [] #atributo que contém um identificador único para cada texto
         self.stop_words = [] #atributo que contém todas as stop words que serão levadas em consideração no seu problema
 
-    def define_stop_words(self,user_defined_stopwords:list = ['']):
+    def define_stop_words(self,user_defined_stopwords:list = []):
         '''
         Inicializa o atributo "stop_words" da classe pegando stopwords de
         diferentes bibliotecas e as tratando para ficarem no formato correto.
@@ -279,12 +279,12 @@ class ClassicClustering():
         print('Tempo para fazer a redução de dimensionalidade: ' + str(elpsd) + '\n')
         return base_tfidf_reduced
 
-    def generate_wordcloud(self, cluster_id, filename:str):
+    def generate_wordcloud(self, cluster, filename:str):
         '''
         Gera uma nuvem de palavras de uma cluster com identificador 'cluster_id'.
 
         Variáveis de entrada:
-        cluster_id: é um inteiro que contém o identificador da cluster que se deseja fazer uma word cloud.
+        cluster: é um inteiro que contém o identificador da cluster que se deseja fazer uma word cloud.
         filename: é o nome do arquivo csv que contém o identificador da cluster e o texto.
 
         Variáveis de saída:
@@ -292,15 +292,13 @@ class ClassicClustering():
         '''
 
         df = pd.read_csv(filename,sep='|')
-        a = df[df['cluster_id'] == cluster]
+        df_cluster = df[df['cluster_id'] == cluster]
 
-        L=[]
-        for i in range(a.shape[0]):
-            L.append(self.textos_tratados[a.iloc[i,2]])
+        textos_da_cluster = list(df_cluster['texto_tratado'])
 
-        text = '\n'.join(L)
+        textos_da_cluster = '\n'.join(textos_da_cluster)
 
-        wordcloud = WordCloud(stopwords=self.stop_words.split()).generate(text)
+        wordcloud = WordCloud().generate(textos_da_cluster)
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis("off")
         plt.show()
