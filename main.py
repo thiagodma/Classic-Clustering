@@ -22,7 +22,7 @@ cc.vec_tfidf()
 #Reduzindo a dimensionalidade. Você deve definir o número de dimensões da saída.
 #Procure um valor que garanta pelo menos 85% da variância explicada
 n_dims = 600
-base_tfidf_reduced = cc.SVD(n_dims, base_tfidf)
+base_tfidf_reduced = cc.SVD(base_tfidf, n_dims)
 
 #Clustering
 print('Começou a clusterização.')
