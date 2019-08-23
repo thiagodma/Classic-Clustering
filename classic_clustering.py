@@ -212,7 +212,7 @@ class ClassicClustering():
         n_textos = np.zeros(len(clusters)) #numero de textos pertencentes a uma cluster
 
         #reduz a dimensionalidade para 2 dimensoes
-        base_tfidf_reduced = self.SVD(2,base_tfidf)
+        base_tfidf_reduced = self.SVD(base_tfidf, dim=2)
         X = base_tfidf_reduced[:,0]
         Y = base_tfidf_reduced[:,1]
 
