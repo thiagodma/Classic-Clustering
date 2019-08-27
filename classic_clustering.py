@@ -22,10 +22,10 @@ class ClassicClustering():
            Aqui você deve adicionar/remover atributos para se ajustar ao seu problema
 
            Variáveis de entrada:
-           None
+               None
 
            Variáveis de saída:
-           None
+               None
         '''
         self.textos = [] #atributo que contém os textos sem processamento algum
         self.textos_tratados = [] #atributo que contém os textos já processados
@@ -38,13 +38,16 @@ class ClassicClustering():
         Inicializa o atributo "stop_words" da classe pegando stopwords de
         diferentes bibliotecas e as tratando para ficarem no formato correto.
 
-        Você pode (deve) adicionar/remover stop words para se ajustar ao seu problema.
+        Você pode adicionar/remover stop words para se ajustar ao seu problema.
 
         Variáveis de entrada:
-        None
+            user_defined_stopwords: é uma variável opcional. É uma lista de
+            strings que você deseja adicionar como stopwords.
 
         Variáveis de saída:
-        None
+            None
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         self.stop_words = get_stop_words('portuguese')
@@ -63,10 +66,14 @@ class ClassicClustering():
         Recodifica em utf-8. Remove cedilhas, acentos e coisas de latin.
 
         Variáveis de entrada:
-        texto: é uma variável do tipo string que contém um texto. Não pode ser uma palavra única.
+            texto: é uma variável do tipo string que contém um texto. Não pode
+            ser uma palavra única.
 
         Variáveis de saída:
-        texto_tratado: é uma variável do tipo string que contém um texto recodificado em utf-8.
+            texto_tratado: é uma variável do tipo string que contém um texto
+            recodificado em utf-8.
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         texto = texto.split()
@@ -81,14 +88,18 @@ class ClassicClustering():
 
     def trata_textos(self, texto:str):
         '''
-        Trata os textos. Remove stopwords, sites, pontuacao, caracteres especiais etc.
-        Você pode (deve) alterar esse método para se ajustar da melhor forma possível ao seu problema
+        Trata os textos. Remove stopwords, sites, pontuacao, caracteres especiais
+        etc. Você pode (deve) alterar esse método para se ajustar da melhor forma
+        possível ao seu problema.
 
         Variáveis de entrada:
-        texto: é uma string que contém o texto a ser tratado.
+            texto: é uma string que contém o texto a ser tratado.
 
         Variáveis de saída:
-        texto_limpo: é uma string que contém o texto já tratado.
+            texto_limpo: é uma string que contém o texto já tratado.
+
+        Obs: Em geral é interessante modificar esse método. Para casos simples
+        não é necessário.
         '''
 
         #converte todos caracteres para letra minúscula
@@ -128,11 +139,13 @@ class ClassicClustering():
         Retira stop words e números romanos.
 
         Variáveis de entrada:
-        palavra: é uma string que contém uma palavra. Não funciona se colocar um texto.
+            palavra: é uma string que contém uma palavra. Não funciona se colocar um texto.
 
         Variáveis de saída:
-        out: é uma string vazia se a entrada era um número romano ou stop word. Se a entrada
-        não era romano ou stop word, retorna a própria entrada.
+            out: é uma string vazia se a entrada era um número romano ou stop word. Se a entrada
+            não era romano ou stop word, retorna a própria entrada.
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         #recodifica em utf-8
@@ -170,10 +183,12 @@ class ClassicClustering():
         O resultado do stemming fica salvo no atributo textos_stem.
 
         Variáveis de entrada:
-        None
+            None
 
         Variáveis de saída:
-        None
+            None
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         print('Comecou a fazer o stemming.')
@@ -197,13 +212,16 @@ class ClassicClustering():
         que contém a informação do número de textos por cluster
 
         Variáveis de entrada:
-        base_tfidf: é uma matriz obtida pela aplicação do tfidf no bag of words obtido a partir
-        dos textos que passaram pelo stemmer. Não é a matriz com dimensionalidade reduzida.
-        id_cluster: é um array que contém os identificadores de cada cluster.
+            base_tfidf: é uma matriz obtida pela aplicação do tfidf no bag of
+            words obtido a partir dos textos que passaram pelo stemmer. Não é a
+            matriz com dimensionalidade reduzida.
+            id_cluster: é um array que contém os identificadores de cada cluster.
 
         Variáveis de saída:
-        cluster_n_textos: é um dataframe em que a primeira coluna está o identificador da cluster
-        e na segunda coluna está o número de textos na cluster.
+            cluster_n_textos: é um dataframe em que a primeira coluna está o identificador da cluster
+            e na segunda coluna está o número de textos na cluster.
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         clusters = np.unique(id_clusters)
@@ -236,11 +254,14 @@ class ClassicClustering():
         não quiser stemming é só mudar o parâmetro 'stem' para False.
 
         Variáveis de entrada:
-        stem: é um bool que diz se vai usar os textos com stemming ou não.
+            stem: é uma variável opcional. É um bool que diz se vai usar os textos
+            com stemming ou não.
 
         Variáveis de saída:
-        base_tfidf: matriz esparsa que contém a vetorização e aplicação do tfidf
-        nos textos
+            base_tfidf: matriz esparsa que contém a vetorização e aplicação do tfidf
+            nos textos
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         if stem:
@@ -261,11 +282,14 @@ class ClassicClustering():
         Reduz a dimensionalidade dos dados de entrada.
 
         Variáveis de entrada:
-        dim: é um inteiro que corresponde ao número de dimensões desejada na saída.
-        base_tfidf: base de dados a ter sua dimensionalidade reduzida.
+            base_tfidf: base de dados a ter sua dimensionalidade reduzida.
+            dim: é uma variável opcional. É um inteiro que corresponde ao número
+            de dimensões desejada na saída.
 
         Variáveis de saída:
-        base_tfidf_reduced: base de dados com dimensionalidade reduzida.
+            base_tfidf_reduced: base de dados com dimensionalidade reduzida.
+
+        Obs: Em geral não é necessário modificar esse método.
         '''
 
         print('Começou a redução de dimensionalidade.')
@@ -279,22 +303,26 @@ class ClassicClustering():
         print('Tempo para fazer a redução de dimensionalidade: ' + str(elpsd) + '\n')
         return base_tfidf_reduced
 
-    def generate_wordcloud(self, cluster, filename:str):
+    def generate_wordcloud(self, cluster:int, filename:str):
         '''
         Gera uma nuvem de palavras de uma cluster com identificador 'cluster_id'.
 
         Variáveis de entrada:
-        cluster: é um inteiro que contém o identificador da cluster que se deseja fazer uma word cloud.
-        filename: é o nome do arquivo csv que contém o identificador da cluster e o texto.
+            cluster: é um inteiro que contém o identificador da cluster que se
+            deseja fazer uma word cloud.
+            filename: é o nome do arquivo csv que contém o identificador da
+            cluster e o texto.
 
         Variáveis de saída:
-        None
+            None
+
+        Obs: Se você não modificou o formato dos csvs não é necessário modificar esse método.
         '''
 
         df = pd.read_csv(filename,sep='|')
         df_cluster = df[df['cluster_id'] == cluster]
 
-        textos_da_cluster = list(df_cluster['texto_tratado'])
+        textos_da_cluster = list(df_cluster['textos_tratados'])
 
         textos_da_cluster = '\n'.join(textos_da_cluster)
 
@@ -303,14 +331,49 @@ class ClassicClustering():
         plt.axis("off")
         plt.show()
 
+    def mostra_conteudo_cluster(self, filename:str, cluster:int, n_amostras:int=10):
+        '''
+        Esse método cria um arquivo txt com 'n_amostras' aleatórias da cluster 'cluster'.
+
+        Variáveis de entrada:
+            filename: é uma string com o nome do csv a ser lido;
+            cluster: é um inteiro que corresponde ao código da cluster que você
+            deseja analisar;
+            n_amostras: é um inteiro. É uma variável opcional em que você determina
+            quantas amostras da cluster irá escrever no txt.
+
+        Variáveis de saída:
+            None
+
+        Obs: Se você não modificou o formato dos csvs não é necessário modificar esse método.
+        '''
+
+        df = pd.read_csv(filename, sep='|')
+        df_cluster = df[df['cluster_id'] == cluster]
+
+        if df_cluster.shape[0] >= n_amostras:
+            df_cluster_sample = df_cluster.sample(n_amostras)
+        else:
+            df_cluster_sample = df_cluster
+
+        fo = open(r'conteudo_cluster'+str(cluster)+'_n_'+str(df_cluster_sample.shape[0])+'.txt', 'w+')
+
+        for i in range(df_cluster_sample.shape[0]):
+            fo.writelines(df_cluster_sample['textos_id'].iloc[i] + '\n')
+            fo.writelines(df_cluster_sample['textos'].iloc[i])
+            fo.writelines('\n\n')
+
     def generate_csvs(self):
         '''
         Crie aqui o método que cria csvs que serão utilizados para a análise dos resultados.
-        Você pode (deve) adicionar variáveis de entrada para se ajustar ao seu problema.
 
-        Sugere-se que sejam criados dois csvs:
-        1. info_cluster.csv: a primeira coluna contém o identificador da cluster ('cluster_id') e a segunda coluna contém
-        o número de textos na cluster ('numero de textos').
-        2. textos_por_cluster.csv: a primeira coluna contém o texto (ou uma referência para o texto) e a segunda coluna contém
-        o identificador de qual cluster esse texto pertence.
+        É necessário que você crie um csv com as seguintes características:
+            1.Uma coluna que contém o identificador do texto (o atributo textos_id).
+            Essa coluna DEVE se chamar 'textos_id';
+            2.Uma coluna que contém o códigos das clusters. Essa coluna DEVE se
+            chamar 'cluster_id';
+            3.Uma coluna que contém os textos tratados (o atributo textos_tratados).
+            Essa coluna DEVE se chamar 'textos_tratados'.
+            4. Uma coluna que contém os textos puros (o atributo textos). Essa
+            coluna DEVE se chamar 'textos'
         '''
