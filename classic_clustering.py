@@ -248,7 +248,7 @@ class ClassicClustering():
 
         return cluster_n_textos
 
-    def vec_tfidf(self,stem:bool=True):
+    def vec_tfidf(self, ngram_range:tuple=(1,1), stem:bool=True):
         '''
         Vetoriza e aplica o tfidf nos textos. Por padrão utiliza stemming. Se
         não quiser stemming é só mudar o parâmetro 'stem' para False.
@@ -265,7 +265,7 @@ class ClassicClustering():
         '''
 
         if stem:
-            vec = CountVectorizer()
+            vec = CountVectorizer(ngram_range=ngram_range)
             bag_palavras = vec.fit_transform(self.textos_stem)
             feature_names = vec.get_feature_names()
             base_tfidf = TfidfTransformer().fit_transform(bag_palavras)
@@ -331,7 +331,7 @@ class ClassicClustering():
         plt.axis("off")
         plt.show()
 
-    def mostra_conteudo_cluster(self, filename:str, cluster:int, n_amostras:int=10):
+    def mostra_conteudo_cluster(self, filename:str, cluster:int, n_amostras:int=10, st:bool=1):
         '''
         Esse método cria um arquivo txt com 'n_amostras' aleatórias da cluster 'cluster'.
 
@@ -356,13 +356,21 @@ class ClassicClustering():
         else:
             df_cluster_sample = df_cluster
 
-        fo = open(r'conteudo_cluster'+str(cluster)+'_n_'+str(df_cluster_sample.shape[0])+'.txt', 'w+')
+        fo = open(r'conteudo_cluster'+str(cluster)+'_n_'+str(df_cluster.shape[0])+'.txt', 'w+')
 
-        for i in range(df_cluster_sample.shape[0]):
-            fo.writelines(df_cluster_sample['textos_id'].iloc[i] + '\n')
-            fo.writelines(df_cluster_sample['textos'].iloc[i])
-            fo.writelines('\n\n')
+        #Se for para escrever os textos sem tratamento
+        if(st):
+            for i in range(df_cluster_sample.shape[0]):
+                fo.writelines(df_cluster_sample['textos_id'].iloc[i] + '\n')
+                fo.writelines(df_cluster_sample['textos'].iloc[i])
+                fo.writelines('\n\n')
+        else:
+            for i in range(df_cluster_sample.shape[0]):
+                fo.writelines(df_cluster_sample['textos_id'].iloc[i] + '\n')
+                fo.writelines(df_cluster_sample['textos_tratados'].iloc[i])
+                fo.writelines('\n\n')
 
+        fo.close()
     def generate_csvs(self):
         '''
         Crie aqui o método que cria csvs que serão utilizados para a análise dos resultados.
