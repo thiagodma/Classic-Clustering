@@ -17,7 +17,7 @@ cc.importa_textos()
 cc.stem()
 
 #Vetorizando e aplicando o tfidf
-cc.vec_tfidf()
+base_tfidf = cc.vec_tfidf()
 
 #Reduzindo a dimensionalidade. Você deve definir o número de dimensões da saída.
 #Procure um valor que garanta pelo menos 85% da variância explicada
